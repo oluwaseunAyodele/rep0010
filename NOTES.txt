@@ -1,0 +1,318 @@
+
+
+WEB SCRARPING USING BEAUYTIFUL SOUP
+[ A PRACTICAL EXAMPLE  ]
+
+#Assumptions :
+
+#I assume you have python3.X installed and you are running from the terminal
+#For this project I have Xammp running on my local system , but you can replace with a web url
+#you can also replace with file as show in
+
+
+
+
+LETS START 
+ACTIVITY 1
+see scrappy_001.py
+
+
+In order to access webpages for webscrapping we will be using two very important libraries .
+The requests Library and the BeautifulSoup Library . If you do not have them installed you can install them as 
+follows :
+
+To install the requests library       -  pip install  requests
+To install the Beautiful soup Library  - pip install  beautifulsoup4
+
+
+To Access the webpage 
+first import the required Libraries as follows:
+
+import requests
+from bs4 import BeautifulSoup
+
+
+//
+Next  I will use one of the  requests methods to accesss the webpage.
+
+These methods are: 
+ get(),posts(),put(),del(),options(),head()
+
+
+Using the get() method  to access the web page and store the result  in a variable called rsp
+
+#url="yahoo.com"
+url="http://localhost/1/_PHP/_petroblog/"
+
+rsp=requests.get(url)
+
+to get the status of the reques we print out 
+rsp.status_code
+
+**the status code is a value which tells us if we successfully accessed the website or not
+** a return value of 200 means we accessed the website successfully
+
+
+print(rsp.status_code)
+print (rsp.headers)
+
+**the header object will show header details of the website
+
+
+see scrappy_001.py
+
+
+ACTIVITY 2
+see scrappy_002.py
+
+The rsp object created as in , rsp=requests.get(url) , the above has a content method we can use to view the content of the extracted url
+lets view what is inside the rsp object using the content method
+
+print(rsp.content)
+
+** you will note that the content viewed is complex and muddled up to have a concise interpretation of this data
+we will use the beautiful soup library
+
+
+We can create a soup object and store the result in a variable called soup_obj
+
+rsp_src=rsp.content
+soup_obj=BeautifulSoup(rsp_src,'lxml')
+
+**the lxml is a parser which is an option to add to the BeautifulSoup() method 
+
+
+
+
+ACTIVITY 3
+see scrappy_003.py
+Lets Perform some operations using some  BeautifulSoup methods 
+
+The prettify() can be used to display output in a well formatted pattern
+print(soup_obj.prettify())
+
+
+this will print the first occurence of the p tag in the document
+print(soup_obj.p)
+
+this will print the first occurence of the b tag in the document
+print(soup_obj.b)
+
+this will print all the occurences of the b tag in the document
+print(soup_obj.find_all('b'))
+
+
+
+
+
+Now we have the beautifulsoup object , here we will need to know the structure of the web page in oreder to 
+view what parts of the web site content we want to extract.
+
+To do this you can achieve in two ways 
+
+1 right click on the web page and view the page source , this will open a new tab which will
+show the entire web structure of the web page
+2
+you can inspect the elements through the view element or inspect element option in chrome
+
+
+That being said , lets get all the links in the web page
+
+all_links=soup_obj.find_all("a")
+print(all_links)
+
+**the find_all() method is a soup method which allows us to locate and extract all the a tags in the extracted document 
+the result is a list and thus we can apply a for loop as follows
+
+for linkx in all_links:
+    print ("---//----")
+    print (linkx)
+
+This will print all the links out in a straight line with a demarcator "---//----"
+
+
+
+
+ACTIVITY 4
+see scrappy_004.py
+
+If we wanted to show only the links that have a specific  word in their texts e.g likes
+
+so I want to see all links with the text likes in it
+
+'''
+for linkx in all_links:
+    print ("---//----")
+    if "Likes" in linkx.text 
+        print (linkx)
+'''
+
+**the text method , is used to get the text in an extracted data , for example a tag
+
+notice the href attribute in the a tag . we can extract the content of this attribute and print it out.
+To do this we modify our forloop as follows 
+
+for linkx in all_links:
+    print ("---//----")
+    print (linkx)
+    print (linkx.text)
+    print (linkx.attrs['href'])
+
+
+OR
+for linkx in all_links:
+    print ("---//----")
+    print (linkx)	
+    print (linkx.attrs['href']+"\n"+linkx.text)
+
+
+
+
+
+
+ACTIVITY 5
+see scrappy_005.py
+
+assuming we have a tag h2 which contains a link a
+we can modify the above code to loop through the h2 tag and get the a tags as follows
+
+create a list d_h2_urls=[]
+
+dxx = soup_xx.find_all('div', {'class': ['title']})
+print( dxx)
+print( '\n..........'+'printing line by line'+'...........\n')
+for d_xxvalue in dxx:
+	print(d_xxvalue)
+
+
+print( '\n..........'+'printing line by line href in each '+'...........\n')
+for d_xxvalue_href in dxx:
+	print(d_xxvalue_href.)
+
+Working with the soup object
+TAG manipulation
+
+d_tag=soup_obj.p
+print("-----the tag ----")
+print("")
+print(d_tag)
+
+print("")
+print("-----the tag name----")	
+print(d_tag.name)	
+	
+	
+print("")
+print("-----the NEW tag name----")	
+d_tag.name="h3"
+print(d_tag.name)	
+	
+print("-----the NEW tag ----")
+print("")
+print(d_tag)	
+	
+the above code will get a tag , and its contents and change the tag name and 
+print out the result
+
+
+
+
+
+We can get all the Href in a selected div section using the following 
+
+
+
+url="http://localhost/1/_PHP/_petroblog/"
+
+rsp=requests.get(url)
+rsp.status_code
+rsp_src=rsp.content
+soup_xx=BeautifulSoup(rsp_src,'lxml')
+dxx = soup_xx.find_all('div', {'class': ['title']})
+
+
+
+
+
+
+print('STATUS CODE IS ',rsp.status_code)
+#print a new line
+print()
+
+urls = [] 
+for a_tag in dxx:
+	urls.append(url)
+	for elmt in urls:
+		print ('href is :','\n',elmt)
+
+
+
+
+
+
+
+ACTIVITY 6
+see scrappy_006.py
+
+
+WORKING ON AN HTML FILE
+
+import the libraries we need 
+
+import requests
+from bs4 import BeautifulSoup
+from csv import writer
+
+
+
+Get the 
+url="_petroblog/news-grid.html"
+with open(url,"r") as f:
+     url_r=f.read()
+
+soup_obj=BeautifulSoup(url_r,"html.parser")
+
+We can get all links through the a tag	
+
+d_divs=soup_obj.findAll('div')
+
+for divx in d_divs:
+        # check if the entry is empty or not 
+	if divx !="":
+	    a_link=divx.findAll('a')
+	    for a_x in a_link:
+	        print('LINK_TEXT -',a_x.text,'LINK -',a_x )
+		    #print(a_x)
+	        print('\n'+'-----next div is -----'+'\n')
+
+
+
+Writing Our Results to a Csv,or to Html file
+	
+First we rewrite our code as 	
+rsp_src=rsp.content
+soup_obj=BeautifulSoup(rsp_src,'lxml')
+soup_xx=BeautifulSoup(rsp_src,'lxml')
+dxx = soup_xx.find_all('div', {'class': ['title']})
+	
+	
+with open('posted_file.csv','w') as csv_file:
+		csv_writer = writer(csv_file)
+		headers=['Link_Tag','','Link_Text','','Link_href']
+		csv_writer.writerow(headers)	
+		for a in dxx:
+			ahref=a.find('a')
+			try:
+				a_txt=ahref.text
+				print(ahref,'\n',a_txt,'\n',url)
+				towrite_1=[ahref,'\n',a_txt,'\n',url]
+				csv_writer.writerow(towrite_1)
+			except Exception:
+				print(ahref,'\n',url)
+				towrite=[ahref,'\n ','\n ','\n',url]
+				csv_writer.writerow(towrite)
+
+#Note the '\n' creates the inline empty columns in the final print out
+	
+	
+	
